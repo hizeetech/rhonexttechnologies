@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}{{ service.title }} — RHONEXT{% endblock %}
+{% block content %}
+<div class="container py-5 reveal">
+  <h1 class="mb-3">{{ service.title }}</h1>
+  <p class="lead">{{ service.short_description }}</p>
+  <div>{{ service.full_description|linebreaks }}</div>
+</div>
+{% endblock %}

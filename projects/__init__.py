@@ -1,0 +1,1 @@
+"""Projects app for case studies and portfolio."""

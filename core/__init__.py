@@ -1,0 +1,1 @@
+"""Core app for site settings and common models."""

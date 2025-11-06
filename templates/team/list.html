@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Team — RHONEXT{% endblock %}
+{% block content %}
+<div class="container py-5 reveal">
+  <h1 class="mb-4">Meet the Team</h1>
+  <div class="row g-4">
+    {% for m in team %}
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        {% if m.photo %}<img src="{{ m.photo.url }}" class="card-img-top" alt="{{ m.name }}">{% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ m.name }}</h5>
+          <p class="card-text">{{ m.position }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p>No team members yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}About — RHONEXT{% endblock %}
+{% block content %}
+<div class="container py-5" style="max-width:900px;">
+  <h1 class="mb-4">About Us</h1>
+  {% if settings %}
+    <p class="lead">{{ settings.hero_subtitle }}</p>
+    <hr>
+    <h3>Mission & Vision</h3>
+    <p>We craft reliable, scalable software that drives business outcomes.</p>
+    <h3 class="mt-4">Contact</h3>
+    <p class="mb-0"><strong>Email:</strong> {{ settings.contact_email }}</p>
+    {% if settings.contact_phone %}<p class="mb-0"><strong>Phone:</strong> {{ settings.contact_phone }}</p>{% endif %}
+    {% if settings.address %}<p><strong>Address:</strong> {{ settings.address }}</p>{% endif %}
+  {% else %}
+    <p>Welcome to RHONEXT. Add Site Settings from the Admin to populate this page.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,1 @@
+"""Blog app for insights and articles."""

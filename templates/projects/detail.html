@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{{ project.title }} — RHONEXT{% endblock %}
+{% block content %}
+<div class="container py-5 reveal">
+  <h1 class="mb-3">{{ project.title }}</h1>
+  <p class="lead">Technologies: {{ project.technologies }}</p>
+  <div>{{ project.full_description|linebreaks }}</div>
+
+  <div class="row mt-4">
+    {% for img in project.gallery.all %}
+      <div class="col-md-4 mb-3">
+        <img class="img-fluid rounded" src="{{ img.image.url }}" alt="{{ project.title }} screenshot">
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

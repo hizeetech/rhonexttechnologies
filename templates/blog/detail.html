@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} — RHONEXT{% endblock %}
+{% block content %}
+<div class="container py-5 reveal">
+  <h1 class="mb-3">{{ post.title }}</h1>
+  <p class="text-muted">By {{ post.author }} • {{ post.created_at|date:'M j, Y' }}</p>
+  <div>{{ post.content|linebreaks }}</div>
+</div>
+{% endblock %}

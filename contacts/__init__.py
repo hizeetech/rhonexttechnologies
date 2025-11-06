@@ -1,0 +1,1 @@
+"""Contacts app providing contact form and message storage."""

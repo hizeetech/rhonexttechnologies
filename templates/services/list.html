@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Services — RHONEXT{% endblock %}
+{% block content %}
+<div class="container py-5 reveal">
+  <h1 class="mb-4">Services</h1>
+  <div class="row g-4">
+    {% for s in services %}
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        {% if s.icon %}<img src="{{ s.icon.url }}" class="card-img-top" alt="{{ s.title }}">{% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ s.title }}</h5>
+          <p class="card-text">{{ s.short_description|truncatechars:150 }}</p>
+          <a class="stretched-link" href="/services/{{ s.slug }}/">Details</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p>No services yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

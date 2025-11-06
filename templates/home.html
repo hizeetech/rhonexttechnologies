@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% block title %}{{ settings.site_name|default:'RHONEXT' }} — Build with Confidence{% endblock %}
+{% block content %}
+<section class="hero-section reveal">
+  <div class="hero-bg">
+    {% if settings.hero_media_video %}
+      <video class="hero-bg-video" src="{{ settings.hero_media_video.url }}" autoplay muted loop playsinline {% if settings.hero_media_image %}poster="{{ settings.hero_media_image.url }}"{% endif %}></video>
+    {% elif settings.hero_media_image %}
+      <img class="hero-bg-image" src="{{ settings.hero_media_image.url }}" alt="Hero background">
+    {% endif %}
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="container hero-content text-center">
+    <span class="hero-kicker"><i class="fa-solid fa-rocket icon"></i> Product Engineering Studio</span>
+    <span class="hero-subkicker"><i class="fa-solid fa-shield-halved icon"></i> Trusted software partner</span>
+    <h1 class="hero-title fw-bold"><span class="gradient-text">{{ settings.hero_title|default:'We build modern software.' }}</span></h1>
+    <p class="hero-subtitle">{{ settings.hero_subtitle|default:'Custom software solutions, reliable delivery, and long-term impact.' }}</p>
+    <div class="hero-actions justify-content-center">
+      <a href="/contact/" class="btn btn-primary btn-lg">Let’s talk about your next project</a>
+      <a href="/projects/" class="btn btn-outline-light btn-lg">See our work <i class="fa-solid fa-arrow-right ms-1"></i></a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider divider-thick"></div>
+
+<!-- Clients logo strip -->
+<section class="py-4 reveal">
+  <div class="container">
+    <span class="section-kicker"><i class="fa-solid fa-users icon"></i> Trusted by teams</span>
+    <div class="clients-strip mt-3">
+      {% if client_logos %}
+        {% for c in client_logos %}
+          <div class="client">
+            {% if c.url %}
+              <a href="{{ c.url }}" target="_blank" rel="noopener">
+                <img src="{{ c.logo.url }}" alt="{{ c.name }}" />
+              </a>
+            {% else %}
+              <img src="{{ c.logo.url }}" alt="{{ c.name }}" />
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="client"><i class="fa-brands fa-aws"></i></div>
+        <div class="client"><i class="fa-brands fa-figma"></i></div>
+        <div class="client"><i class="fa-brands fa-github"></i></div>
+        <div class="client"><i class="fa-brands fa-docker"></i></div>
+        <div class="client"><i class="fa-brands fa-react"></i></div>
+        <div class="client"><i class="fa-brands fa-python"></i></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="angled-divider reveal" data-parallax></div>
+
+<!-- Secondary hero with audience cards -->
+{% if settings.hero2_title or settings.hero2_media_image or settings.hero2_media_video %}
+<section class="hero-section hero-section-alt reveal">
+  <div class="hero-bg">
+    {% if settings.hero2_media_video %}
+      <video class="hero-bg-video" src="{{ settings.hero2_media_video.url }}" autoplay muted loop playsinline {% if settings.hero2_media_image %}poster="{{ settings.hero2_media_image.url }}"{% endif %}></video>
+    {% elif settings.hero2_media_image %}
+      <img class="hero-bg-image" src="{{ settings.hero2_media_image.url }}" alt="Background">
+    {% endif %}
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="container hero-content text-center">
+    {% if settings.hero2_title %}<h2 class="hero-title fw-bold mb-4">{{ settings.hero2_title }}</h2>{% endif %}
+    {% if settings.hero2_subtitle %}<p class="hero-subtitle mb-5">{{ settings.hero2_subtitle }}</p>{% endif %}
+
+    {% if audiences %}
+    <div class="row g-4 justify-content-center audience-grid">
+      {% for a in audiences %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card audience-card h-100 text-center">
+            <div class="audience-icon mb-3">
+              {% if a.icon %}
+                <img src="{{ a.icon.url }}" alt="{{ a.name }}" />
+              {% elif a.icon_class %}
+                <i class="fa-solid {{ a.icon_class }}"></i>
+              {% else %}
+                <i class="fa-solid fa-users"></i>
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ a.name }}</h5>
+              <p class="card-text">{{ a.description }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if settings.process_graphic %}
+<section class="py-5 reveal process-section">
+  <div class="container">
+    <div class="process-blend rounded-4">
+      <img src="{{ settings.process_graphic.url }}" alt="Process overview" class="process-graphic">
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="py-5 reveal">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <span class="section-kicker"><i class="fa-solid fa-sparkles icon"></i> Capabilities</span>
+        <h2 class="section-title mb-0">Our Expertise</h2>
+      </div>
+      <a href="/services/" class="btn btn-outline-light btn-sm">All Services</a>
+    </div>
+    <div class="row g-4">
+      {% for s in featured_services %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body d-flex align-items-start">
+              <div class="me-3">
+                {% if s.icon %}
+                  <img src="{{ s.icon.url }}" alt="{{ s.title }}" class="rounded" style="width:48px;height:48px;object-fit:cover;">
+                {% else %}
+                  <div class="icon-circle">
+                    <i class="fa-solid fa-cubes"></i>
+                  </div>
+                {% endif %}
+              </div>
+              <div>
+                <h5 class="card-title mb-1">{{ s.title }}</h5>
+                <p class="card-text mb-2">{{ s.short_description|truncatechars:100 }}</p>
+                <a href="/services/{{ s.slug }}/" class="stretched-link">Learn more</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>No services configured yet. Add some in Admin.</p>
+      {% endfor %}
+    </div>
+  </div>
+ </section>
+
+<section class="py-5 reveal">
+  <div class="container">
+    <span class="section-kicker"><i class="fa-solid fa-layer-group icon"></i> Highlights</span>
+    <h2 class="section-title mb-4">Featured Services</h2>
+    <div class="row g-4">
+      {% for s in featured_services %}
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            {% if s.icon %}<img src="{{ s.icon.url }}" class="card-img-top" alt="{{ s.title }}">{% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ s.title }}</h5>
+              <p class="card-text">{{ s.short_description|truncatechars:120 }}</p>
+              <a href="/services/{{ s.slug }}/" class="stretched-link">Learn more</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>No featured services yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA section -->
+{% if settings.cta_headline_line1 or settings.cta_button_text %}
+<section class="cta-section reveal">
+  <div class="container">
+    <div class="cta-box gradient-outline rounded-4">
+      <div class="cta-inner d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+        <div>
+          {% if settings.cta_headline_line1 %}<h3 class="mb-2">{{ settings.cta_headline_line1 }}</h3>{% endif %}
+          {% if settings.cta_headline_line2 %}<h3 class="mb-2">{{ settings.cta_headline_line2 }}</h3>{% endif %}
+          {% if settings.cta_headline_line3 %}<h3 class="mb-0">{{ settings.cta_headline_line3 }}</h3>{% endif %}
+        </div>
+        {% if settings.cta_button_text and settings.cta_button_url %}
+          <a class="btn btn-light btn-lg gradient-accent" href="{{ settings.cta_button_url }}">{{ settings.cta_button_text }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="py-5 reveal alt-bg">
+  <div class="container">
+    <span class="section-kicker"><i class="fa-solid fa-diagram-project icon"></i> Portfolio</span>
+    <h2 class="section-title mb-4">Featured Projects</h2>
+    {% if featured_projects %}
+      <div class="projects-carousel" data-interval-seconds="{{ settings.projects_carousel_interval|default:5 }}">
+        <div class="track">
+          {% for p in featured_projects %}
+            <div class="item">
+              <div class="card h-100 shadow-sm project-card">
+                {% if p.image %}<img src="{{ p.image.url }}" class="card-img-top" alt="{{ p.title }}">{% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ p.title }}</h5>
+                  <p class="card-text">{{ p.short_description|truncatechars:120 }}</p>
+                  <a href="/projects/{{ p.slug }}/" class="stretched-link">View case study</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="slider-dots" aria-label="Project navigation"></div>
+        <div class="slider-controls mt-3 d-flex justify-content-center gap-2">
+          <button class="btn btn-outline-light btn-sm" type="button" data-action="prev-projects" aria-label="Previous">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button class="btn btn-outline-light btn-sm" type="button" data-action="next-projects" aria-label="Next">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    {% else %}
+      <p>No featured projects yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Testimonials slider -->
+<section class="py-5 reveal">
+  <div class="container">
+    <span class="section-kicker"><i class="fa-solid fa-comment-dots icon"></i> What clients say</span>
+    <h2 class="section-title mb-4">Testimonials</h2>
+    <div class="testimonials-slider">
+      <div class="slides">
+        {% for t in testimonials %}
+        <div class="slide">
+          <p class="mb-2">“{{ t.message }}”</p>
+          <div class="testimonial-meta">
+            {% if t.client_photo %}
+            <img src="{{ t.client_photo.url }}" alt="{{ t.client_name }}">
+            {% endif %}
+            <div>
+              <strong>{{ t.client_name }}</strong>
+              <div class="small">{% if t.position %}{{ t.position }} • {% endif %}{{ t.company }}</div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="slide">
+          <p class="mb-2">“RHONEXT delivered exceptional quality and reliability on a tight timeline.”</p>
+          <div class="testimonial-meta">
+            <div>
+              <strong>Anonymous Client</strong>
+              <div class="small">CTO • Fintech</div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="slider-dots" aria-label="Testimonial navigation"></div>
+      <div class="slider-controls mt-3">
+        <button class="btn btn-outline-light btn-sm" type="button" data-action="prev"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="btn btn-outline-light btn-sm" type="button" data-action="next"><i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 reveal">
+  <div class="container">
+    <div class="p-5 bg-primary text-white rounded-3">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h3 class="mb-2">Let’s talk about your next project</h3>
+          <p class="mb-0">We’ll help shape, build, and scale your product.</p>
+        </div>
+        <a class="btn btn-light" href="/contact/">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
