@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="py-5">
+  <div class="container" style="max-width:900px;">
+    <h2 class="mb-3">Submit {{ role_label|default:"Staff" }} Report</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label" for="id_{{ field.name }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+          {% for err in field.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
+        </div>
+      {% endfor %}
+      <button class="btn btn-primary" type="submit">Submit Report</button>
+      <a class="btn btn-outline-secondary" href="{% url 'staff:dashboard' %}">Cancel</a>
+    </form>
+  </div>
+</section>
+
+<!-- CKEditor OSS build with cache-busting -->
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js?v={{ static_version }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var init = function() {
+      var areas = document.querySelectorAll('.richtext');
+      if (window.CKEDITOR && areas.length) {
+        areas.forEach(function(el) { CKEDITOR.replace(el); });
+      }
+    };
+    // Initialize after DOM is ready and give a slight delay for CDN load.
+    setTimeout(init, 50);
+  });
+</script>
+{% endblock %}

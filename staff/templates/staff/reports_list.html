@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4">Reports</h2>
+    {% if reports %}
+      <ul class="list-group">
+        {% for r in reports %}
+          <li class="list-group-item d-flex justify-content-between">
+            <div>
+              <strong>{{ r.title }}</strong>
+              <div class="text-muted small">Type: {{ r.get_report_type_display }}</div>
+            </div>
+            <div>
+              {% if r.file %}
+                <a class="btn btn-sm btn-outline-secondary" href="{{ r.file.url }}" download>Download</a>
+              {% endif %}
+              <a class="btn btn-sm btn-primary" href="{% url 'staff:report_ack' r.pk %}">Acknowledge</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">No reports available.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

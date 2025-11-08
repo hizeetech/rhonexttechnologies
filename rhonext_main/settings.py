@@ -16,12 +16,37 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env if present (no external dependency)
+ENV_PATH = BASE_DIR / ".env"
+
+def _load_env(path=ENV_PATH):
+    try:
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                for raw in f:
+                    line = raw.strip()
+                    if not line or line.startswith("#"):
+                        continue
+                    if "=" not in line:
+                        continue
+                    key, val = line.split("=", 1)
+                    key = key.strip()
+                    # remove optional quotes around values
+                    val = val.strip().strip('"').strip("'")
+                    # do not override existing env
+                    os.environ.setdefault(key, val)
+    except Exception:
+        # Fail silently to avoid breaking settings if .env is malformed
+        pass
+
+_load_env()
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s(#$s2iy9qonnbg^+l48bs&1^kjgn%fi)7w@opczt=4hc5l0b7'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,6 +57,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +71,7 @@ INSTALLED_APPS = [
     'blog',
     'team',
     'contacts',
+    'staff',
 ]
 
 MIDDLEWARE = [
@@ -83,8 +110,12 @@ WSGI_APPLICATION = 'rhonext_main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -137,3 +168,54 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Static assets cache busting (development convenience)
 STATIC_VERSION = 'v1'
+
+# Authentication redirects for staff portal
+LOGIN_URL = '/staff/login/'
+LOGIN_REDIRECT_URL = '/staff/dashboard/'
+LOGOUT_REDIRECT_URL = '/staff/login/'
+
+# Jazzmin admin theme configuration
+JAZZMIN_SETTINGS = {
+    "site_title": "RHONEXT Admin",
+    "site_header": "RHONEXT Administration",
+    "site_brand": "RHONEXT",
+    "welcome_sign": "Welcome to RHONEXT admin",
+    "copyright": "Rho NEXT TECHNOLOGIES",
+    "show_ui_builder": False,
+    "topmenu_links": [
+        {"name": "Dashboard", "url": "/admin/", "permissions": ["auth.view_user"]},
+        {"app": "staff"},
+        {"app": "core"},
+    ],
+    "usermenu_links": [
+        {"name": "Profile", "url": "/staff/profile/"},
+    ],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "cyborg",
+    "dark_mode": True,
+    "accent": "primary",
+    "navbar": "navbar-dark",
+    "sidebar": "sidebar-dark-primary",
+}
+
+# Email settings from environment
+# Default to SMTP; use .env to supply credentials
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend",
+)
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "localhost")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "25"))
+
+# Only one of SSL/TLS should be active
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "False").lower() in {"true", "1", "yes"}
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "False").lower() in {"true", "1", "yes"}
+if EMAIL_USE_SSL:
+    EMAIL_USE_TLS = False
+
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "webmaster@localhost")

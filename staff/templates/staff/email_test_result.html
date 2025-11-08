@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="py-5">
+  <div class="container" style="max-width:640px;">
+    <h2 class="mb-3">Email Test</h2>
+    {% if success %}
+      <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex gap-2 mt-3">
+      <a href="{% url 'staff:profile' %}" class="btn btn-outline-secondary">Back to Profile</a>
+      <a href="{% url 'staff:dashboard' %}" class="btn btn-outline-primary">Back to Dashboard</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

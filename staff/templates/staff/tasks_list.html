@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4">My Tasks</h2>
+    {% if tasks %}
+      <ul class="list-group">
+        {% for t in tasks %}
+          <li class="list-group-item">
+            <strong>{{ t.title }}</strong>
+            <div class="text-muted small">{{ t.get_status_display }} • Priority: {{ t.get_priority_display }}{% if t.deadline %} • Due: {{ t.deadline }}{% endif %}</div>
+            <p class="mb-0">{{ t.description }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">No tasks assigned.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

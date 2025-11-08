@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4">Staff Dashboard — {{ role }}</h2>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header">Assigned Tasks</div>
+          <div class="card-body">
+            {% if tasks %}
+              <ul class="list-group list-group-flush">
+                {% for t in tasks %}
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <strong>{{ t.title }}</strong>
+                        <div class="text-muted small">Status: {{ t.get_status_display }} • Priority: {{ t.get_priority_display }}{% if t.deadline %} • Due: {{ t.deadline }}{% endif %}</div>
+                      </div>
+                      {% if t.status != 'COMPLETED' %}
+                        <a class="btn btn-sm btn-success" href="{% url 'staff:task_ack_complete' t.pk %}">Acknowledge Completion</a>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted mb-0">No tasks assigned.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Your To-Do List</span>
+            <a href="{% url 'staff:todos_add' %}" class="btn btn-sm btn-outline-primary">Add</a>
+          </div>
+          <div class="card-body">
+            {% if todos %}
+              <ul class="list-group list-group-flush">
+                {% for td in todos %}
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <strong>{{ td.title }}</strong>
+                        <div class="text-muted small">Status: {{ td.get_status_display }}{% if td.due_date %} • Due: {{ td.due_date }}{% endif %}</div>
+                      </div>
+                      {% if td.status == 'PENDING' or td.status == 'IN_PROGRESS' %}
+                        <a href="{% url 'staff:todos_complete' td.pk %}" class="btn btn-sm btn-success">Submit for Approval</a>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted mb-0">No to-dos yet.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Reports</span>
+            <a href="{% url 'staff:report_submit' %}" class="btn btn-sm btn-outline-primary">Submit Report</a>
+          </div>
+          <div class="card-body">
+            {% if reports %}
+              <ul class="list-group list-group-flush">
+                {% for r in reports %}
+                  <li class="list-group-item d-flex justify-content-between">
+                    <div>
+                      <strong>{{ r.title }}</strong>
+                      <div class="text-muted small">Type: {{ r.get_report_type_display }}</div>
+                    </div>
+                    <div>
+                      {% if r.file %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ r.file.url }}" download>Download</a>
+                      {% endif %}
+                      <a class="btn btn-sm btn-primary" href="{% url 'staff:report_ack' r.pk %}">Acknowledge</a>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted mb-0">No reports available.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center"><span>Notifications</span><a href="{% url 'staff:profile' %}" class="btn btn-sm btn-outline-secondary">Profile</a></div>
+          <div class="card-body">
+            {% if notifications %}
+              <ul class="list-group list-group-flush">
+                {% for n in notifications %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ n.message }}</span>
+                    <div class="d-flex gap-2">
+                      <a class="btn btn-sm btn-outline-primary" href="{% url 'staff:notification_view' n.pk %}">View</a>
+                      <a class="btn btn-sm btn-outline-success" href="{% url 'staff:notification_read' n.pk %}">Mark Read</a>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted mb-0">No new notifications.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

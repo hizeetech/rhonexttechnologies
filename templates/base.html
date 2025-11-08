@@ -24,7 +24,7 @@
       {% if settings and settings.logo %}
         <img src="{{ settings.logo.url }}" alt="{{ settings.site_name|default:'RHONEXT' }}" class="navbar-logo">
       {% endif %}
-      <span>{% if settings and settings.site_name %}{{ settings.site_name }}{% else %}RHONEXT{% endif %}</span>
+      <span>{% if settings and settings.site_name %}{{ settings.site_name }}{% else %}RHO NEXT TECHNOLOGIES{% endif %}</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -36,6 +36,17 @@
         <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="/team/">Team</a></li>
         <li class="nav-item"><a class="nav-link btn btn-primary text-white ms-2" href="/contact/">Get in Touch</a></li>
+        {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link ms-2" href="{% url 'staff:profile' %}">Profile</a></li>
+          <li class="nav-item ms-2">
+            <form method="post" action="{% url 'staff:logout' %}">
+              {% csrf_token %}
+              <button class="btn btn-outline-danger btn-sm" type="submit">Logout</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link ms-2" href="{% url 'staff:login' %}">Login</a></li>
+        {% endif %}
         <li class="nav-item ms-2">
           <button id="themeToggle" class="btn btn-outline-light btn-sm" aria-label="Toggle dark mode">
             <i class="fa-solid fa-moon" id="themeIcon"></i>
@@ -73,6 +84,28 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'js/main.js' %}?v={{ static_version }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% if messages %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    {% for message in messages %}
+      (function() {
+        const tag = '{{ message.tags|default:"info" }}';
+        const iconMap = {success: 'success', error: 'error', warning: 'warning', info: 'info'};
+        const icon = iconMap[tag] || 'info';
+        const title = tag.charAt(0).toUpperCase() + tag.slice(1);
+        Swal.fire({
+          icon: icon,
+          title: title,
+          text: '{{ message|escapejs }}',
+          confirmButtonColor: '#0d6efd'
+        });
+      })();
+    {% endfor %}
+  });
+</script>
+{% endif %}
 
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">

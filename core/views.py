@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+from django.shortcuts import render
 from services.models import Service
 from projects.models import Project
 from .models import SiteSettings, Testimonial, ClientLogo, AudienceSegment
@@ -27,3 +28,8 @@ class AboutView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["settings"] = SiteSettings.objects.first()
         return context
+
+
+def custom_404(request, exception=None):
+    # Render friendly 404 page with proper status code
+    return render(request, "404.html", status=404)

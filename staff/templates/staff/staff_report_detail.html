@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="py-5">
+  <div class="container" style="max-width:900px;">
+    <h2 class="mb-3">{{ report.get_role_display }} Report — {{ report.title }}</h2>
+    <div class="mb-2 text-muted small">
+      Type: {{ report.get_report_type_display }} • Submitted: {{ report.created_at|date:"M j, Y H:i" }}
+      {% if report.date_created %} • Date Created: {{ report.date_created }}{% endif %}
+    </div>
+    {% if report.attachment %}
+      <p><a class="btn btn-sm btn-outline-secondary" href="{{ report.attachment.url }}" download>Download Attachment</a></p>
+    {% endif %}
+    <article class="card">
+      <div class="card-body">
+        {{ report.content|safe }}
+      </div>
+    </article>
+    <a class="btn btn-outline-primary mt-3" href="{% url 'staff:dashboard' %}">Back to Dashboard</a>
+  </div>
+</section>
+{% endblock %}

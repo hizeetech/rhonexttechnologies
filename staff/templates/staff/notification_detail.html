@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="py-5">
+  <div class="container" style="max-width:800px;">
+    <h2 class="mb-3">Notification</h2>
+    <div class="card">
+      <div class="card-body">
+        <p class="mb-1"><strong>Message:</strong></p>
+        <p>{{ notification.message }}</p>
+        <p class="text-muted small mb-2">Received: {{ notification.created_at|date:"M j, Y H:i" }}</p>
+        {% if notification.link %}
+          <a href="{{ notification.link }}" class="btn btn-outline-secondary">Go to item</a>
+        {% endif %}
+        <a href="{% url 'staff:notification_read' notification.pk %}" class="btn btn-success">Mark Read</a>
+        <a href="{% url 'staff:dashboard' %}" class="btn btn-outline-primary">Back to Dashboard</a>
+      </div>
+    </div>
+
+    {% if report %}
+      <div class="mt-4">
+        <h5 class="mb-2">Linked Report</h5>
+        <div class="card">
+          <div class="card-body">
+            <p class="text-muted small mb-1">{{ report.get_role_display }} • {{ report.get_report_type_display }}</p>
+            <h5>{{ report.title }}</h5>
+            <div class="mt-2">{{ report.content|safe }}</div>
+            {% if report.attachment %}
+              <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ report.attachment.url }}" download>Download Attachment</a>
+            {% endif %}
+            <a class="btn btn-sm btn-primary mt-2" href="{% url 'staff:staff_report_detail' report.pk %}">Open Report</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if staff_message %}
+      <div class="mt-4">
+        <h5 class="mb-2">Linked Message</h5>
+        <div class="card">
+          <div class="card-body">
+            <p class="text-muted small mb-1">From: {{ staff_message.sender }} • {{ staff_message.created_at|date:"M j, Y H:i" }}</p>
+            <div>{{ staff_message.content|linebreaksbr }}</div>
+            <a class="btn btn-sm btn-primary mt-2" href="{% url 'staff:staff_message_detail' staff_message.pk %}">Open Message</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
