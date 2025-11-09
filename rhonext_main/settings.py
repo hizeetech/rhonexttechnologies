@@ -49,7 +49,7 @@ _load_env()
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = ['172.237.102.171', '127.0.0.1', 'rhonextec.com', 'www.rhonextec.com']
 
