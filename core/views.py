@@ -30,6 +30,6 @@ class AboutView(TemplateView):
         return context
 
 
-def custom_404(request, exception=None):
+def custom_404(request, exception=None, *args, **kwargs):
     # Render friendly 404 page with proper status code
     return render(request, "404.html", status=404)

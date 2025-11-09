@@ -34,5 +34,11 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# Catch-all to render a friendly 404 page for any unmatched URL
-urlpatterns += [re_path(r'^.*$', custom_404)]
+# Use Django's handler404 to render friendly 404 without breaking APPEND_SLASH redirects
+handler404 = 'core.views.custom_404'
+
+# Friendly 404 for unknown URLs even in DEBUG, excluding known prefixes
+# Use non-capturing groups to prevent passing regex groups to the view
+urlpatterns += [
+    re_path(r'^(?!(?:admin|services|projects|blog|team|contact|staff|static|media)(?:/|$)).*$', custom_404),
+]
