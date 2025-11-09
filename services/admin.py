@@ -4,5 +4,6 @@ from .models import Service
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ("title", "is_featured", "created_at")
+    list_display = ("title", "is_expertise", "is_featured", "created_at")
+    list_filter = ("is_expertise", "is_featured")
     prepopulated_fields = {"slug": ("title",)}

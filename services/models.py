@@ -7,6 +7,8 @@ class Service(models.Model):
     short_description = models.TextField()
     full_description = models.TextField(blank=True)
     icon = models.ImageField(upload_to="services/icons/", blank=True, null=True)
+    # Show in "Our Expertise" section on the homepage
+    is_expertise = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

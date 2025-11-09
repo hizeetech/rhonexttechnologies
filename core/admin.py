@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SiteSettings, Testimonial, ClientLogo, AudienceSegment
+from .models import SiteSettings, Testimonial, ClientLogo, AudienceSegment, FeaturedService
 
 
 @admin.register(SiteSettings)
@@ -38,3 +38,11 @@ class AudienceSegmentAdmin(admin.ModelAdmin):
     list_display = ("name", "order", "is_active")
     list_editable = ("order", "is_active")
     search_fields = ("name", "description")
+
+
+@admin.register(FeaturedService)
+class FeaturedServiceAdmin(admin.ModelAdmin):
+    list_display = ("title", "order", "is_active")
+    list_editable = ("order", "is_active")
+    search_fields = ("title", "short_description")
+    fields = ("title", "short_description", "image", "link_url", "order", "is_active")

@@ -73,3 +73,22 @@ class AudienceSegment(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FeaturedService(models.Model):
+    """Homepage-only Featured Service cards, managed separately from Services."""
+    title = models.CharField(max_length=200)
+    short_description = models.TextField()
+    image = models.ImageField(upload_to="services/icons/", blank=True, null=True)
+    link_url = models.URLField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["order", "-created_at"]
+        verbose_name = "Featured Service (Homepage)"
+        verbose_name_plural = "Featured Services (Homepage)"
+
+    def __str__(self):
+        return self.title

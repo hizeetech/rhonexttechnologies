@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from services.models import Service
 from projects.models import Project
-from .models import SiteSettings, Testimonial, ClientLogo, AudienceSegment
+from .models import SiteSettings, Testimonial, ClientLogo, AudienceSegment, FeaturedService
 
 
 class HomeView(TemplateView):
@@ -12,7 +12,9 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         settings = SiteSettings.objects.first()
         context["settings"] = settings
-        context["featured_services"] = Service.objects.filter(is_featured=True)
+        # Separate content: expertise uses Service model; homepage featured uses dedicated model
+        context["expertise_services"] = Service.objects.filter(is_expertise=True)
+        context["featured_service_cards"] = FeaturedService.objects.filter(is_active=True).order_by("order", "-created_at")
         # Show all featured projects ordered by explicit order then newest
         context["featured_projects"] = Project.objects.filter(is_featured=True).order_by("order", "-created_at")
         context["testimonials"] = Testimonial.objects.all()[:10]
