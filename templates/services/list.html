@@ -5,13 +5,23 @@
   <h1 class="mb-4">Services</h1>
   <div class="row g-4">
     {% for s in services %}
-    <div class="col-md-4">
+    <div class="col-12 col-sm-6 col-lg-4">
       <div class="card h-100 shadow-sm">
-        {% if s.icon %}<img src="{{ s.icon.url }}" class="card-img-top" alt="{{ s.title }}">{% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ s.title }}</h5>
-          <p class="card-text">{{ s.short_description|truncatechars:150 }}</p>
-          <a class="stretched-link" href="/services/{{ s.slug }}/">Details</a>
+        <div class="card-body d-flex align-items-start">
+          <div class="me-3">
+            {% if s.icon %}
+              <img src="{{ s.icon.url }}" alt="{{ s.title }}" class="rounded" style="width:48px;height:48px;object-fit:cover;">
+            {% else %}
+              <div class="icon-circle">
+                <i class="fa-solid fa-cubes"></i>
+              </div>
+            {% endif %}
+          </div>
+          <div>
+            <h5 class="card-title mb-1">{{ s.title }}</h5>
+            <p class="card-text mb-2">{{ s.short_description|truncatechars:150 }}</p>
+            <a class="stretched-link" href="/services/{{ s.slug }}/">Details</a>
+          </div>
         </div>
       </div>
     </div>

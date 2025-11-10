@@ -4,4 +4,6 @@ from .models import TeamMember
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = ("name", "position")
+    list_display = ("name", "position", "order")
+    list_editable = ("order",)
+    ordering = ("order", "name")

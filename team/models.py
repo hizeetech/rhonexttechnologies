@@ -8,6 +8,10 @@ class TeamMember(models.Model):
     photo = models.ImageField(upload_to="team/")
     linkedin = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
+    order = models.PositiveIntegerField(default=0, db_index=True)
 
     def __str__(self):
         return f"{self.name} - {self.position}"
+
+    class Meta:
+        ordering = ["order", "name"]
