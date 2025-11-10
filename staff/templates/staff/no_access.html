@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card border-warning shadow-sm">
+          <div class="card-body">
+            <h2 class="h4 mb-3 text-warning">Staff Access Required</h2>
+            <p class="mb-3">
+              Your account does not have an active staff profile, so the staff dashboard isn’t available.
+            </p>
+            {% if profile %}
+              {% if not is_active %}
+                <p class="mb-3">Your staff profile is currently inactive. Please contact an administrator to restore access.</p>
+              {% endif %}
+            {% else %}
+              <p class="mb-3">No staff profile is associated with your account. Please contact an administrator to be added.</p>
+            {% endif %}
+            <div class="d-flex gap-2">
+              <a href="{% url 'staff:logout' %}" class="btn btn-outline-danger">Logout</a>
+              <a href="/" class="btn btn-outline-secondary">Go to Homepage</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

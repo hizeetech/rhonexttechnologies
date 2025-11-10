@@ -4,6 +4,7 @@ from .views import (
     StaffLoginView,
     StaffLogoutView,
     dashboard,
+    no_access,
     profile,
     tasks_list,
     task_ack_complete,
@@ -24,6 +25,7 @@ app_name = "staff"
 urlpatterns = [
     path("login/", StaffLoginView.as_view(), name="login"),
     path("logout/", StaffLogoutView.as_view(), name="logout"),
+    path("no-access/", no_access, name="no_access"),
     # Password reset
     path("password-reset/", auth_views.PasswordResetView.as_view(template_name="staff/password_reset_form.html", email_template_name="staff/password_reset_email.html"), name="password_reset"),
     path("password-reset/done/", auth_views.PasswordResetDoneView.as_view(template_name="staff/password_reset_done.html"), name="password_reset_done"),

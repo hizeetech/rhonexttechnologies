@@ -19,9 +19,11 @@ def staff_required(view_func):
         try:
             profile = StaffProfile.objects.get(user=request.user)
         except StaffProfile.DoesNotExist:
-            return redirect("staff:login")
+            messages.warning(request, "Your account is not linked to an active staff profile.")
+            return redirect("staff:no_access")
         if not profile.is_active:
-            return redirect("staff:login")
+            messages.warning(request, "Your staff profile is inactive. Please contact an administrator.")
+            return redirect("staff:no_access")
         return view_func(request, *args, **kwargs)
     return _wrapped
 
@@ -270,6 +272,19 @@ def staff_message_detail(request, pk):
     if not (msg.sender == request.user or msg.recipients.filter(pk=request.user.pk).exists() or request.user.is_superuser):
         return redirect("staff:dashboard")
     return render(request, "staff/staff_message_detail.html", {"message": msg})
+
+def no_access(request):
+    try:
+        profile = StaffProfile.objects.get(user=request.user)
+        is_active = profile.is_active
+    except StaffProfile.DoesNotExist:
+        profile = None
+        is_active = False
+    context = {
+        "profile": profile,
+        "is_active": is_active,
+    }
+    return render(request, "staff/no_access.html", context)
 @staff_required
 def profile(request):
     user = request.user
