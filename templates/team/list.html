@@ -6,11 +6,15 @@
   <div class="row g-4">
     {% for m in team %}
     <div class="col-md-4">
-      <div class="card h-100 shadow-sm">
-        {% if m.photo %}<img src="{{ m.photo.url }}" class="card-img-top" alt="{{ m.name }}">{% endif %}
+      <div class="card h-100 shadow-sm position-relative">
+        <a href="/team/{{ m.slug }}/" aria-label="View {{ m.name }} bio">
+          {% if m.photo %}<img src="{{ m.photo.url }}" class="card-img-top" alt="{{ m.name }}">{% endif %}
+        </a>
         <div class="card-body">
           <h5 class="card-title">{{ m.name }}</h5>
           <p class="card-text">{{ m.position }}</p>
+          <a href="/team/{{ m.slug }}/" class="btn btn-outline-light btn-sm">View Bio</a>
+          <a href="/team/{{ m.slug }}/" class="stretched-link" aria-label="Open {{ m.name }} bio"></a>
         </div>
       </div>
     </div>
